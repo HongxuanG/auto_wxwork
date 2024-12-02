@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+.venv/
+
+build/
+dist/
+# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.spec

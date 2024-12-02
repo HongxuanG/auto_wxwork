@@ -1,0 +1,8 @@
+pyautogui
+pyperclip
+psutil
+pywin32
+pygetwindow
+Pillow
+requests
+pyinstaller
