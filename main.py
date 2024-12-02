@@ -331,7 +331,7 @@ group_search_option_y = window_top + int(window_height * 0.1)  # 顶部距离约
 group_search_option_width = 40
 group_search_option_height = 30
 
-take_debug_screenshot(group_search_option_x, group_search_option_y, group_search_option_width, group_search_option_height)
+# take_debug_screenshot(group_search_option_x, group_search_option_y, group_search_option_width, group_search_option_height)
 # 计算搜索框中心点位置
 center_x = group_search_option_x + (group_search_option_width // 2)
 center_y = group_search_option_y + (group_search_option_height // 2)
@@ -380,7 +380,7 @@ if check_search_result(window_left, window_top, window_width, window_height):
 
     # 发送消息
     print("正在发送消息...")
-    # pyautogui.press('enter')
+    pyautogui.press('enter')
     print("消息已发送。")
 else:
     print("未能确认找到指定的群聊，程序即将退出。")
