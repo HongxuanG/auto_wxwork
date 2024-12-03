@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>企业微信自动发送测试</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h2>企业微信自动发送测试</h2>
+    
+    <script>
+        function sendMessage() {
+            const params = {
+                group: "测试群",
+                text: "测试消息"
+            };
+            
+            // 构建URL
+            const url = "autowxwork://" + 
+                Object.entries(params)
+                    .map(([key, value]) => 
+                        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+                    .join('&');
+            
+            // 使用 iframe 方式调用
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            try {
+                iframe.src = url;
+                console.log("已尝试调用:", url);
+            } catch(e) {
+                console.error("调用失败:", e);
+            }
+            
+            // 清理 iframe
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
+        }
+    </script>
+
+    <button onclick="sendMessage()">发送测试消息</button>
+</body>
+</html>
