@@ -23,6 +23,7 @@ pip install pywin32
 pip install pygetwindow
 pip install Pillow
 pip install requests
+pip install pyinstaller
 ```
 
 ### Python 使用方法
@@ -60,13 +61,94 @@ python main.py -g "测试群" --image "https://example.com/image.jpg"
 python main.py -g "测试群" --image "https://example.com/image1.jpg" "https://example.com/image2.jpg"
 ```
 
-4. 指定企业微信路径：
+### 打包说明
+
+#### 1. 使用 PyInstaller 打包成 EXE
 
 ```bash
-python main.py -p "C:\Program Files\WXWork\WXWork.exe" -g "群聊名称" -t "消息内容"
+python build.py
 ```
 
+打包后会在 `dist` 目录下生成 `企业微信自动化工具.exe`。
+
+#### 2. 使用 Inno Setup 制作安装程序
+
+1. **准备文件**
+   - 确保 `dist` 目录下有打包好的 exe 文件
+   - 准备以下文件：
+     - `setup.iss`（Inno Setup 脚本）
+     - `auto_wxwork.ico`（图标文件）
+     - `README.md`（说明文档）
+     - `发送文本消息.bat`
+     - `发送图片.bat`
+
+2. **修改版本号**
+   - 更新 `version.txt` 中的版本信息
+   - 更新 `setup.iss` 中的版本号
+
+3. **编译安装程序**
+   - 打开 Inno Setup Compiler
+   - 打开 `setup.iss` 文件
+   - 点击 "Build" -> "Compile" 或按 Ctrl+F9
+   - 编译完成后会在 `Output` 目录生成安装程序
+
+4. **发布新版本流程**
+   1. 更新代码并测试
+   2. 修改版本号（`version.txt` 和 `setup.iss`）
+   3. 运行 `python build.py` 生成新的 exe
+   4. 使用 Inno Setup 编译生成安装程序
+   5. 测试安装程序
+   6. 发布新版本
+
 ## 用户使用指南
+
+### 网页调用方式
+
+1. **引入 JS 文件**
+
+```html
+<script src="openAutoWxwork.js"></script>
+```
+
+2. **基本用法**
+
+```html
+<!-- 发送文本消息 -->
+<button onclick="openAutoWxwork('测试群', '测试消息')">发送消息</button>
+
+<!-- 发送图片 -->
+<button onclick="openAutoWxwork('测试群', null, ['图片URL1', '图片URL2'])">发送图片</button>
+```
+
+3. **完整示例**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>企业微信自动化工具示例</title>
+    <script src="openAutoWxwork.js"></script>
+</head>
+<body>
+    <button onclick="openAutoWxwork('测试群', '测试消息')">发送文本</button>
+    <button onclick="openAutoWxwork('测试群', null, ['http://example.com/image.jpg'])">发送图片</button>
+</body>
+</html>
+```
+
+4. **URL 协议调用**
+
+```javascript
+// 发送文本消息
+window.open('autowxwork://group=测试群&text=测试消息')
+
+// 发送图片
+window.open('autowxwork://group=测试群&image=http://example.com/image.jpg')
+```
+
+首次使用时会弹出协议调用确认框：
+
+![协议调用确认](https://github.com/user-attachments/assets/ac61f7fd-d91a-4a32-b19f-6e96139fe582)
 
 ### 命令行方式使用
 
@@ -138,7 +220,8 @@ python main.py -p "C:\Program Files\WXWork\WXWork.exe" -g "群聊名称" -t "消
 
 - 操作系统：Windows
 - Python 3.6+
-- 企业微信客户端
+- 企业微信客户端 4.1.31.6017
+- Inno Setup（用于制作安装程序）
 
 ### 运行环境要求
 
