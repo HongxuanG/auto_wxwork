@@ -9,14 +9,15 @@ function checkAutoWxwork(params) {
     const { group, text, image } = params || {}
     
     // 构建检测用的URL，直接带上参数
-    let testUrl = 'autowxwork://group=' + group
+    let testUrl = 'autowxwork://group=' + group+'&'
+    const urlParams = []
     if (text)
-      testUrl += `&text=${text}`
+      urlParams.push(`text=${encodeURIComponent(text)}`)
     if (image) {
       if (typeof image === 'string')
-        testUrl += `&image=${image}`
+        urlParams.push(`image=${encodeURIComponent(image)}`)
       else if (Array.isArray(image))
-        testUrl += `&image=${image.map(item => item.name).join(' ')}`
+        urlParams.push(`image=${encodeURIComponent(image.map(item => item.name).join(' '))}`)
     }
 
     // 设置超时检测
@@ -42,7 +43,7 @@ function checkAutoWxwork(params) {
     window.addEventListener('blur', handleBlur)
 
     // 尝试打开带参数的协议
-    iframe.src = testUrl
+    iframe.src = testUrl + urlParams.join('&')
   })
 }
 
