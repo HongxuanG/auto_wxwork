@@ -107,7 +107,7 @@ python build.py
 1. **引入 JS 文件**
 
 ```html
-<script src="openAutoWxwork.js"></script>
+<script src="path/to/open_auto_wxwork.js"></script>
 ```
 
 2. **基本用法**

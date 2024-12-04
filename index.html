@@ -7,10 +7,12 @@
 <body>
     <h2>企业微信自动发送测试</h2>
     
-    <script>
+    <script type="module">
+        import { openAutoWxwork } from './open_auto_wxwork.js';
+        window.openAutoWxwork = openAutoWxwork
         function sendMessage() {
             const params = {
-                group: "测试群",
+                group: "微信创的群",
                 text: "测试消息"
             };
             
@@ -41,5 +43,9 @@
     </script>
 
     <button onclick="sendMessage()">发送测试消息</button>
+    <button onclick="openAutoWxwork({
+        group: '微信创的群',
+        text: '测试消息'
+    })">发送测试消息1</button>
 </body>
 </html>

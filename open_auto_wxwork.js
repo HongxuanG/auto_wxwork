@@ -1,11 +1,23 @@
 // 检查是否能打开 autowxwork 协议
-function checkAutoWxwork() {
+function checkAutoWxwork(params) {
   return new Promise((resolve) => {
     const iframe = document.createElement('iframe')
     iframe.style.display = 'none'
     document.body.appendChild(iframe)
 
     let resolved = false
+    const { group, text, image } = params || {}
+    
+    // 构建检测用的URL，直接带上参数
+    let testUrl = 'autowxwork://group=' + group
+    if (text)
+      testUrl += `&text=${text}`
+    if (image) {
+      if (typeof image === 'string')
+        testUrl += `&image=${image}`
+      else if (Array.isArray(image))
+        testUrl += `&image=${image.map(item => item.name).join(' ')}`
+    }
 
     // 设置超时检测
     const timer = setTimeout(() => {
@@ -15,16 +27,6 @@ function checkAutoWxwork() {
         resolve(false)
       }
     }, 1000)
-
-    // 监听 iframe 的错误事件
-    iframe.onerror = () => {
-      if (!resolved) {
-        resolved = true
-        clearTimeout(timer)
-        document.body.removeChild(iframe)
-        resolve(false)
-      }
-    }
 
     // 如果能打开协议，window.onblur 会被触发
     const handleBlur = () => {
@@ -39,8 +41,8 @@ function checkAutoWxwork() {
 
     window.addEventListener('blur', handleBlur)
 
-    // 尝试打开 autowxwork 协议
-    iframe.src = 'autowxwork://'
+    // 尝试打开带参数的协议
+    iframe.src = testUrl
   })
 }
 
@@ -94,25 +96,14 @@ function createTipDiv() {
 }
 
 // 主函数
-export async function openAutoWxwork(params) {
-  const { text, group, image } = params
-  let str = ''
-
-  if (text)
-    str += `&text=${text}`
-  if (image) {
-    if (typeof image === 'string')
-      str += `&image=${image}`
-    else if (Array.isArray(image))
-      str += `&image=${image.map(item => item.name).join(' ')}`
-  }
+export async function openAutoWxwork(params) {  
 
   try {
-    const canOpen = await checkAutoWxwork()
+    const canOpen = await checkAutoWxwork(params)  // 传入参数
 
     if (canOpen) {
-      // 如果能打开协议，直接打开
-      window.location.href = `autowxwork://group=${group}${str}`
+      // 如果检测成功，不需要再次调用，因为检测时已经发送了参数
+      return true
     }
     else {
       // 如果不能打开，显示提示div
